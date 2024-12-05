@@ -23,36 +23,6 @@ install_strongswan() {
     fi
 }
 
-
-# Function to configure PKI
-configure_pki(){
-    echo "Configuring PKI..."
-
-    #Generate CA key
-    sudo strongswan pki --gen --outform pem > /etc/ipsec.d/cacerts/caPrivateKey.pem
-
-    #Generate CA Cert
-    sudo strongswan pki --self --in /etc/ipsec.d/cacerts/caPrivateKey.pem --dn "CN=My VPN CA" --ca --outform pem > /etc/ipsec.d/cacerts/caCert.pem
-    
-    # Generate server key
-    sudo strongswan pki --gen --outform pem > /etc/ipsec.d/private/serverKey.pem
-
-    # Generate server certificate request
-    sudo strongswan pki --pub --in /etc/ipsec.d/private/serverKey.pem --outform pem > /etc/ipsec.d/reqs/serverReq.pem
-    #Modify it to have server as subjectAltName or CN
-    echo "Modify the request /etc/ipsec.d/reqs/serverReq.pem according your needs."
-
-    #Sign the server certificate request with the CA.
-    sudo strongswan pki --sign --in /etc/ipsec.d/reqs/serverReq.pem --outform pem --cakey /etc/ipsec.d/cacerts/caPrivateKey.pem --cacert /etc/ipsec.d/cacerts/caCert.pem > /etc/ipsec.d/certs/serverCert.pem
-
-#Generate the client certificates in the same way:
-#1. Key: ipsec pki --gen --outform pem > /etc/ipsec.d/private/clientKey.pem
-#2. Request: ipsec pki --pub --in /etc/ipsec.d/private/clientKey.pem --outform pem > /etc/ipsec.d/reqs/clientReq.pem
-#3. Certificate: ipsec pki --sign --in /etc/ipsec.d/reqs/clientReq.pem --outform pem --cakey /etc/ipsec.d/cacerts/caPrivateKey.pem --cacert /etc/ipsec.d/cacerts/caCert.pem > /etc/ipsec.d/certs/clientCert.pem
-
-}
-
-
 # Function to configure the server
 configure_server() {
     echo "Configuring StrongSwan server..."
@@ -71,56 +41,60 @@ include /usr/share/strongswan/charon/*.conf
 
 EOF
 
+cat <<EOF | sudo tee /etc/strongswan.d/strongswan.conf
+    charon {
+            threads = 16
+            dns1 = 8.8.8.8
+            nbns1 = 10.1.1.1
+    }
+    pluto {
+
+    }
+    libstrongswan {
+            crypto_test {
+                    on_add = yes
+            }
+    }
+EOF
+ssh "$REMOTE_USER@$REMOTE_HOST" << EOF
     cat <<EOF | sudo tee /etc/strongswan.d/ipsec.conf
 
-config setup
-    uniqueids = never
-    strict_crl_policy = no
-    charondebug="ike 1, knl 1, cfg 0"
+    conn %default
+            ikelifetime=60m
+            keylife=20m
+            rekeymargin=3m
+            keyingtries=1
 
+    conn roadwarrior-base
+            left=%any
+            leftid=@gateway.example.com
+            leftfirewall=yes
+            right=%any
+            rightsourceip=$HERE/16
+            auto=add
 
-conn %default
-    ikelifetime=60m
-    keylife=20m
-    rekeymargin=3m
-    keyingtries=1
-    authby=secret
-    mobike=no
-
-        conn roadwarrior
-        auto=add
-        compress=no
-        type=tunnel
-        keyexchange=ikev2
-        fragmentation=yes
-        forceencaps=yes
-        ike=aes256-sha1-modp1024,aes128-sha1-modp1024,3des-sha1-modp1024!
-        esp=aes256-sha1,aes128-sha1,3des-sha1!
-        dpdaction=clear
-        dpddelay=300s
-        rekey=no
-        left=%any
-        leftsubnet=0.0.0.0/0,::/0
-        leftcert=/etc/ipsec.d/certs/serverCert.pem
-        leftid=@SERVER_PUBLIC_IP #replace with the server's public IP address or domain name.
-        right=%any
-        rightid=%any
-        rightsourceip=10.10.10.0/24
-        rightdns=8.8.8.8,8.8.4.4
-        rightauth=psk
-        eap_identity=%identity
-
+    conn rw-ikev1-psk-xauth-splittun
+            also=roadwarrior-base
+            keyexchange=ikev1
+            leftsubnet=0.0.0.0/0,::/0
+            leftauth=psk
+            rightauth=psk
+            rightauth2=xauth
+    EOF
 EOF
     #Pre-shared key for testing only, generate it securely. This is not good way for production, use Certificates
     echo "Configuring /etc/ipsec.secrets..."
-    sudo sh -c "echo ': PSK \"SuperSecurePassword\"' >> /etc/ipsec.secrets"
+    ssh "$REMOTE_USER@$REMOTE_HOST" << EOF
+    cat <<EOF | sudo tee /etc/ipsec.secrets"
+    # pre-shared key
+    gateway.example.com %any : PSK "my super secret pre-shared key goes here"
 
+    user1@example.com : XAUTH "password 1"
+    user2@exmaple.com : XAUTH "password 2"
 
     sudo systemctl restart strongswan
-
-
-}
-
+    EOF
+EOF
 # Function to configure the firewall
 configure_firewall() {
     echo "Configuring firewall..."
