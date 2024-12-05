@@ -9,17 +9,15 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-
-
-
 # Function to install StrongSwan
 install_strongswan() {
     echo "Updating system and installing StrongSwan..."
     if command_exists apt; then
         sudo apt update
-        sudo apt install -y strongswan strongswan-pki
+        sudo apt install -y strongswan strongswan-pki strongswan-swanctl libcharon-extra-plugins libcharon-extauth-plugins libstrongswan-extra-plugins
     elif command_exists dnf; then
-        sudo dnf install -y strongswan
+        sudo dnf update
+        sudo dnf install -y strongswan strongswan-pki strongswan-swanctl libcharon-extra-plugins libcharon-extauth-plugins libstrongswan-extra-plugins
     else
         echo "Unsupported package manager. Install StrongSwan manually."
         exit 1
