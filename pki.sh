@@ -20,8 +20,6 @@ install_openssl() {
     fi
 }
 
-
-
 # Variables globales
 CA_DIR="/root/ca"
 INTERMEDIATE_DIR="/root/ca/intermediate"

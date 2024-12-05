@@ -7,10 +7,7 @@ read LOCAL_CERT_DIR
 # ex : LOCAL_CERT_DIR="/home/user"
 echo "Welcome ${LOCAL_CERT_DIR}!"
 
-echo "Enter your local Dir"
-read LOCAL_CERT_DIR
-# ex : LOCAL_CERT_DIR="/home/user"
-echo "Welcome ${LOCAL_CERT_DIR}!"
+
 
 echo "Enter your username of the distant machine"
 read REMOTE_USER
@@ -23,8 +20,13 @@ read REMOTE_HOST
 echo "Welcome ${REMOTE_HOST}!"
 
 
-=""
-REMOTE_CERT_DIR="/etc/ssl/esgi"
+echo "Enter your local Dir"
+read REMOTE_CERT_DIR
+# ex : LOCAL_CERT_DIR="/etc/ssl/esgi"
+echo "Welcome ${LOCAL_CERT_DIR}!"
+
+
+
 
 # Fichiers à copier
 CERT_FILES=(
