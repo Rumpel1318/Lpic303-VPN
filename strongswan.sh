@@ -9,6 +9,9 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+
+
+
 # Function to install StrongSwan
 install_strongswan() {
     echo "Updating system and installing StrongSwan..."
@@ -23,50 +26,18 @@ install_strongswan() {
     fi
 }
 
-# Function to configure PKI infrastructure
-configure_pki() {
-    echo "Configuring PKI infrastructure..."
-    mkdir -p ~/pki/
-    mkdir -p ~/pki/cacerts
-    mkdir -p ~/pki/certs
-    mkdir -p ~/pki/private
-    chmod 700 ~/pki
 
-    echo "Generating root key..."
-    ipsec pki --gen --type rsa --size 4096 --outform pem > ~/pki/private/ca-key.pem
-
-    echo "Creating root certificate authority..."
-    ipsec pki --self --ca --lifetime 3650 --in ~/pki/private/ca-key.pem \
-        --type rsa --dn "CN=VPN root CA" --outform pem > ~/pki/cacerts/ca-cert.pem
-
-    echo "Creating VPN server key..."
-    ipsec pki --gen --type rsa --size 4096 --outform pem > ~/pki/private/server-key.pem
-
-    echo "Creating and signing VPN server certificate..."
-    read -p "Enter server domain or IP: " server_domain_or_IP
-    ipsec pki --pub --in ~/pki/private/server-key.pem --type rsa \
-        | ipsec pki --issue --lifetime 1825 \
-        --cacert ~/pki/cacerts/ca-cert.pem \
-        --cakey ~/pki/private/ca-key.pem \
-        --dn "CN=$server_domain_or_IP" --san "$server_domain_or_IP" \
-        --flag serverAuth --flag ikeIntermediate --outform pem \
-        > ~/pki/certs/server-cert.pem
-
-    echo "Moving PKI files to /etc/ipsec.d..."
-    sudo cp -r ~/pki/* /etc/ipsec.d/
-}
 
 # Function to configure the server
 configure_server() {
     echo "Configuring StrongSwan server..."
 
-    sudo mv /etc/ipsec.conf{,.original}
     cat <<EOF | sudo tee /etc/ipsec.conf
-config setup
+    config setup
     charondebug="ike 1, knl 1, cfg 0"
     uniqueids=no
 
-conn ikev2-vpn
+    conn ikev2-vpn
     auto=add
     compress=no
     type=tunnel
