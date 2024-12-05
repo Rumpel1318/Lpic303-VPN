@@ -1,45 +1,58 @@
 #!/bin/bash
 
-# Vérifier que le script est exécuté avec sudo
-if [ "$(id -u)" -ne 0 ]; then
-    echo "Ce script doit être exécuté avec les droits root (sudo)."
-    exit 1
-fi
-
-# Install Openssl
-install_openssl() {
-    echo "Updating system and installing Openssl..."
-    if command_exists apt; then
-        sudo apt update
-        sudo apt install -y openssl
-    elif command_exists dnf; then
-        sudo dnf install -y openssl
-    else
-        echo "Unsupported package manager. Install Openssl manually."
-        exit 1
-    fi
-}
-
 # Variables globales
 CA_DIR="/root/ca"
 INTERMEDIATE_DIR="/root/ca/intermediate"
 DEFAULT_DAYS=3650
 
+
+# Vérifier que le script est exécuté avec sudo
+is_sudo() {
+    if [ "$(id -u)" -ne 0 ]; then
+        echo "Ce script doit être exécuté avec les droits root (sudo)."
+        exit 1
+    fi
+}
+command_exists() {
+    command -v "$1" &> /dev/null
+}
+# Install Openssl
+install_openssl() {
+    echo "Updating system and installing OpenSSL..."
+    if command_exists apt; then
+        sudo apt update
+        sudo apt install -y openssl
+    elif command_exists dnf; then
+        sudo dnf install -y openssl
+    elif command_exists yum; then
+        sudo yum install -y openssl
+    else
+        echo "Unsupported package manager. Install OpenSSL manually."
+        exit 1
+    fi
+}
 # Créer la structure de base
 setup_directories() {
     echo "Création des répertoires nécessaires pour la PKI..."
-    sudo mkdir -p "$CA_DIR"/{certs,crl,newcerts,private,csr}
+    sudo mkdir -p "$CA_DIR"/certs
+    sudo mkdir -p "$CA_DIR"/crl
+    sudo mkdir -p "$CA_DIR"/newcerts
+    sudo mkdir -p "$CA_DIR"/private
+    sudo mkdir -p "$CA_DIR"/csr
     sudo chmod 700 "$CA_DIR/private"
     sudo touch "$CA_DIR/index.txt"
     echo 1000 | sudo tee "$CA_DIR/serial"
 
-    sudo mkdir -p "$INTERMEDIATE_DIR"/{certs,crl,csr,newcerts,private}
+    sudo mkdir -p "$INTERMEDIATE_DIR"/certs
+    sudo mkdir -p "$INTERMEDIATE_DIR"/crl
+    sudo mkdir -p "$INTERMEDIATE_DIR"/csr
+    sudo mkdir -p "$INTERMEDIATE_DIR"/newcerts
+    sudo mkdir -p "$INTERMEDIATE_DIR"/private
     sudo chmod 700 "$INTERMEDIATE_DIR/private"
     sudo touch "$INTERMEDIATE_DIR/index.txt"
     echo 1000 | sudo tee "$INTERMEDIATE_DIR/serial"
     echo 1000 | sudo tee "$INTERMEDIATE_DIR/crlnumber"
 }
-
 # Configuration openssl.cnf pour la CA racine
 create_openssl_cnf_root() {
     cat <<EOF | sudo tee "$CA_DIR/openssl.cnf" > /dev/null
@@ -222,6 +235,7 @@ revoke_cert() {
 }
 
 # Menu principal
+is_sudo
 while true; do
     echo "1) Créer la CA (racine et intermédiaire)"
     echo "2) Gérer les CSR (générer et signer)"
