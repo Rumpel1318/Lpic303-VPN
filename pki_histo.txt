@@ -1,0 +1,189 @@
+sudo apt update
+    9  sudo apt install openssl -y
+   10  sudo mkdir -p /root/ca/{certs,crl,newcerts,private,csr}
+   11  sudo chmod 700 /root/ca/private
+   12  sudo touch /root/ca/index.txt
+   13  echo 1000 | sudo tee /root/ca/serial
+   14  sudo nano /root/ca/openssl.cnf
+   15  sudo openssl genrsa -out /root/ca/private/ca.key.pem 4096
+   16  sudo chmod 400 /root/ca/private/ca.key.pem
+   17  sudo openssl req -config /root/ca/openssl.cnf     -key /root/ca/private/ca.key.pem     -new -x509 -days 7300 -sha256 -extensions v3_ca     -out /root/ca/certs/ca.cert.pem
+   18  sudo chmod 444 /root/ca/certs/ca.cert.pem
+   19  sudo mkdir -p /root/ca/intermediate/{certs,crl,csr,newcerts,private}
+   20  sudo chmod 700 /root/ca/intermediate/private
+   21  sudo touch /root/ca/intermediate/index.txt
+   22  sudo touch /root/ca/intermediate/index.txt
+   23  echo 1000 | sudo tee /root/ca/intermediate/serial
+   24  echo 1000 | sudo tee /root/ca/intermediate/crlnumber
+   25  sudo nano /root/ca/intermediate/openssl.cnf
+   26  sudo nano /root/ca/intermediate/openssl.cnf
+   27  sudo openssl genrsa -out /root/ca/intermediate/private/intermediate.key.pem 4096
+   28  sudo chmod 400 /root/ca/intermediate/private/intermediate.key.pem
+   29  sudo openssl req -config /root/ca/intermediate/openssl.cnf -new -sha256     -key /root/ca/intermediate/private/intermediate.key.pem     -out /root/ca/intermediate/csr/intermediate.csr.pem
+   30  sudo openssl ca -config /root/ca/openssl.cnf -extensions v3_ca     -days 3650 -notext -md sha256     -in /root/ca/intermediate/csr/intermediate.csr.pem     -out /root/ca/intermediate/certs/intermediate.cert.pem
+   31  sudo chmod 444 /root/ca/intermediate/certs/intermediate.cert.pem
+   32  sudo cat /root/ca/intermediate/certs/intermediate.cert.pem          /root/ca/certs/ca.cert.pem > /root/ca/intermediate/certs/ca-chain.cert.pem
+   33  sudo chmod 444 /root/ca/intermediate/certs/ca-chain.cert.pem
+   34  sudo nano /root/ca/generate_csr.sh
+   35  sudo chmod +x /root/ca/generate_csr.sh
+   36  sudo nano /root/ca/generate_csr.sh
+   37  sudo chmod +x /root/ca/generate_csr.sh
+   38  sudo nano /root/ca/sign_csr.sh
+   39  sudo chmod +x /root/ca/sign_csr.sh
+   40  sudo nano /root/ca/revoke_cert.sh
+   41  sudo chmod +x /root/ca/revoke_cert.sh
+   42  sudo chmod +x /root/ca/revoke_cert.sh
+   43  exit
+   44  history
+   45  sudo /root/ca/generate_csr.sh esgi.local
+   46  sudo /root/ca/sign_csr.sh esgi.local
+   47  sudo /root/ca/generate_csr.sh esgi.local
+   48  sudo /root/ca/sign_csr.sh esgi.local
+   49  sudo /root/ca/generate_csr.sh esgi.local
+   50  ls -l /root/ca/intermediate/private/
+   51  sudo nano /root/ca/intermediate/openssl.cnf
+   52  sudo nano /root/ca/sign_csr.sh
+   53  sudo nano /root/ca/intermediate/openssl.cnf
+   54  sudo nano /root/ca/intermediate/openssl.cnf
+   55  sudo nano /root/ca/intermediate/openssl.cnf
+   56  sudo /root/ca/sign_csr.sh esgi.local
+   57  sudo nano /root/ca/intermediate/openssl.cnf
+   58  sudo nano /root/ca/intermediate/openssl.cnf
+   59  ls -l /root/ca/intermediate/private/intermediate.key.pem
+   60  ls -l /root/ca/intermediate/certs/intermediate.cert.pem
+   61  sudo chmod 400 /root/ca/intermediate/private/intermediate.key.pem
+   62  sudo chmod 444 /root/ca/intermediate/certs/intermediate.cert.pem
+   63  sudo /root/ca/sign_csr.sh esgi.local
+   64  scp /root/ca/intermediate/certs/esgi.local.cert.pem user@web_server_ip:/home/user/
+   65  scp /root/ca/intermediate/certs/esgi.local.cert.pem rayan@192.168.80.141:/home/user/
+   66  scp /root/ca/intermediate/certs/esgi.local.cert.pem rayan@192.168.80.141:/home/rayan/
+   67  scp /root/ca/intermediate/private/esgi.local.key.pem user@web_server_ip:/home/user/
+   68  scp /root/ca/intermediate/private/esgi.local.key.pem rayan@192.168.80.141:/home/rayan/
+   69  scp /root/ca/intermediate/certs/ca-chain.cert.pem user@web_server_ip:/home/user/
+   70  scp /root/ca/intermediate/certs/ca-chain.cert.pem rayan@192.168.80.141:/home/rayan/
+   71  scp /root/ca/intermediate/private/esgi.local.key.pem rayan@192.168.80.141:/home/rayan/
+   72  scp /root/ca/intermediate/private/esgi.local.key.pem rayan@192.168.80.141:/home/rayan/
+   73  scp /path/to/ca-chain.cert.pem user@:/home/rayan/
+   74  scp /path//ca-chain.cert.pem user@192.168.80.144:/home/rayan/
+   75  ls
+   76  ls ca
+   77  scp /root/ca/intermediate/certs/ca-chain.cert.pem user@192.168.80.144:/home/user/
+   78  scp /root/ca/intermediate/certs/ca-chain.cert.pem rayan@192.168.80.144:/home/user/
+   79  scp /root/ca/intermediate/certs/ca-chain.cert.pem rayan@192.168.80.144:/home/user/
+   80  scp /root/ca/intermediate/certs/ca-chain.cert.pem rayan@192.168.80.144:/home/rayan/
+   81  scp /root/ca/intermediate/certs/ca-chain.cert.pem rayan@192.168.80.146:/home/rayan/
+   82  exit
+   83  apt update
+   84  apt install sudo -y
+   85  sudo
+   86  clear
+   87  sudo apt update
+   88  sudo apt upgrade -y
+   89  systemctl
+   90  clear
+   91  systemctl status ssh
+   92  ip a
+   93  sudo
+   94  clear
+   95  ip a
+   96  cd /root/ca/intermediate/
+   97  openssl genrsa -out private/vpnserver1.key.pem 4096
+   98  chmod 400 private/vpnserver1.key.pem
+   99  openssl req -config openssl.cnf -new -key private/vpnserver1.key.pem -out csr/vpnserver1.csr.pem -subj "/CN=vpnserver1"
+  100  openssl ca -config openssl.cnf -extensions server_cert -days 375 -notext -md sha256 -in csr/vpnserver1.csr.pem -out certs/vpnserver1.cert.pem
+  101  chmod 444 certs/vpnserver1.cert.pem
+  102  cd ..
+  103  cd ..
+  104  openssl ca -config openssl.cnf -extensions server_cert -days 375 -notext -md sha256 -in csr/vpnserver1.csr.pem -out certs/vpnserver1.cert.pem
+  105  chmod 444 certs/vpnserver1.cert.pem
+  106  ls -l certs/
+  107  cd /root/ca/intermediate/
+  108  ls -l
+  109  ls -l openssl.cnf
+  110  nano openssl.cnf
+  111  openssl req -config openssl.cnf -new -key private/vpnserver1.key.pem -out csr/vpnserver1.csr.pem -subj "/CN=vpnserver1"
+  112  openssl ca -config openssl.cnf -extensions server_cert -days 375 -notext -md sha256 -in csr/vpnserver1.csr.pem -out certs/vpnserver1.cert.pem
+  113  chmod 444 certs/vpnserver1.cert.pem
+  114  ls certs/
+  115  openssl req -config openssl.cnf -new -key private/vpnserver1.key.pem -out csr/vpnserver1.csr.pem -subj "/C=FR/ST=Paris/L=Paris/O=MyOrganization/OU=IT Department/CN=vpnserver1"
+  116  nano openssl.cnf
+  117  openssl req -config openssl.cnf -new -key private/vpnserver1.key.pem -out csr/vpnserver1.csr.pem -subj "/C=FR/ST=Paris/L=Paris/O=MyOrganization/OU=IT Department/CN=vpnserver1"
+  118  openssl ca -config openssl.cnf -extensions server_cert -days 375 -notext -md sha256 -in csr/vpnserver1.csr.pem -out certs/vpnserver1.cert.pem
+  119  openssl req -config openssl.cnf -new -key private/vpnserver1.key.pem -out csr/vpnserver1.csr.pem -subj "/C=FR/ST=Grand-Est/L=Paris/O=MyOrganization/OU=IT Department/CN=vpnserver1"
+  120  openssl ca -config openssl.cnf -extensions server_cert -days 375 -notext -md sha256 -in csr/vpnserver1.csr.pem -out certs/vpnserver1.cert.pem
+  121  openssl req -config openssl.cnf -new -key private/vpnserver1.key.pem -out csr/vpnserver1.csr.pem -subj "/C=FR/ST=Grand-Est/L=Paris/O=ESGI/OU=IT Department/CN=vpnserver1"
+  122  openssl ca -config openssl.cnf -extensions server_cert -days 375 -notext -md sha256 -in csr/vpnserver1.csr.pem -out certs/vpnserver1.cert.pem
+  123  chmod 444 certs/vpnserver1.cert.pem
+  124  openssl x509 -in certs/vpnserver1.cert.pem -noout -text
+  125  openssl genrsa -out private/vpnserver2.key.pem 4096
+  126  chmod 400 private/vpnserver2.key.pem
+  127  openssl req -config openssl.cnf -new -key private/vpnserver2.key.pem -out csr/vpnserver2.csr.pem -subj "/C=FR/ST=Grand-Est/L=Paris/O=ESGI/OU=IT Department/CN=vpnserver2"
+  128  openssl ca -config openssl.cnf -extensions server_cert -days 375 -notext -md sha256 -in csr/vpnserver2.csr.pem -out certs/vpnserver2.cert.pem
+  129  chmod 444 certs/vpnserver2.cert.pem
+  130  openssl x509 -in certs/vpnserver2.cert.pem -noout -text
+  131  scp certs/vpnserver1.cert.pem rayan@192.168.80.142:/home/rayan/
+  132  scp private/vpnserver1.key.pem rayan@192.168.80.142:/home/rayan/
+  133  scp ../certs/ca-chain.cert.pem rayan@192.168.80.142:/home/rayan/
+  134  cd ..
+  135  ls
+  136  cd certs/
+  137  sudo find / -name "ca-chain.cert.pem" 2>/dev/null
+  138  scp ../ca/intermediate/certs/ca-chain.cert.pem rayan@192.168.80.142:/home/rayan/
+  139  cd ..
+  140  cd ..
+  141  scp ../ca/intermediate/certs/ca-chain.cert.pem rayan@192.168.80.142:/home/rayan/
+  142  cd ca/intermediate/certs/
+  143  scp ca-chain.cert.pem rayan@192.168.80.142:/home/rayan/
+  144  cd ..
+  145  openssl x509 -in certs/vpnserver1.cert.pem -noout -text
+  146  scp certs/vpnserver2.cert.pem rayan@192.168.80.145:/home/rayan/
+  147  scp private/vpnserver2.key.pem rayan@192.168.80.145:/home/rayan/
+  148  cd ..
+  149  cd ca/intermediate/certs/
+  150  cd intermediate/certs/
+  151  scp ca-chain.cert.pem rayan@192.168.80.145:/home/rayan/
+  152  exit
+  153  scp ca-chain.cert.pem rayan@192.168.80.145:/home/rayan/
+  154  openssl x509 -noout -modulus -in /etc/ipsec.d/certs/vpnserver1.cert.pem | openssl md5
+  155  openssl x509 -noout -modulus -in certs/vpnserver1.cert.pem | openssl md5
+  156  ls
+  157  ls ca
+  158  openssl x509 -noout -modulus -in ca/certs/vpnserver1.cert.pem | openssl md5
+  159  find / vpnserver1.cert.pem
+  160  sudo find / -name "vpnserver1.cert.pem" 2>/dev/null
+  161  openssl x509 -noout -modulus -in /root/ca/intermediate/certs/vpnserver1.cert.pem | openssl md5
+  162  openssl x509 -noout -modulus -in /root/ca/intermediate/certs/vpnserver2.cert.pem | openssl md5
+  163  history
+  164  exit
+  165  history
+  166  exit
+  167  history
+  168  history
+  169  sudo nano /root/ca/intermediate/openssl.cnf
+  170  sudo nano /root/ca/intermediate/openssl.cnf
+  171  sudo  nano /root/ca/intermediate/openssl.cnf
+  172  sudo  cat /root/ca/intermediate/openssl.cnf
+  173  sudo  nano /root/ca/intermediate/openssl.cnf
+  174  ls /root/ca/intermediate/
+  175  mkdir -p /root/ca/intermediate/crl
+  176  ls
+  177  ls /root/ca/intermediate/ -a
+  178  ls /root/ca/intermediate/ -all
+  179  echo 1000 > /root/ca/intermediate/crlnumber
+  180  openssl genrsa -out /root/ca/intermediate/private/test.key.pem 2048
+  181  chmod 400 /root/ca/intermediate/private/test.key.pem
+  182  openssl req -config /root/ca/intermediate/openssl.cnf     -key /root/ca/intermediate/private/test.key.pem     -new -sha256 -out /root/ca/intermediate/csr/test.csr.pem     -subj "/C=FR/ST=Grand-Est/O=ESGI/CN=Test Cert"
+  183  openssl ca -config /root/ca/intermediate/openssl.cnf     -extensions server_cert -days 30 -notext -md sha256     -in /root/ca/intermediate/csr/test.csr.pem     -out /root/ca/intermediate/certs/test.cert.pem
+  184  chmod 444 /root/ca/intermediate/certs/test.cert.pem
+  185  scp /root/ca/intermediate/certs/test.cert.pem rayan@192.168.80.142:/etc/ipsec.d/certs/
+  186  scp /root/ca/intermediate/certs/test.cert.pem rayan@192.168.80.142:/home/rayan/
+  187  scp /root/ca/intermediate/private/test.key.pem rayan@192.168.80.142:/etc/ipsec.d/private/
+  188  scp /root/ca/intermediate/private/test.key.pem rayan@192.168.80.142:/home/rayan/
+  189  cat /root/ca/intermediate/index.txt
+  190  openssl ca -config /root/ca/intermediate/openssl.cnf -revoke /root/ca/intermediate/certs/test.cert.pem
+  191  openssl ca -config /root/ca/intermediate/openssl.cnf -gencrl -out /root/ca/intermediate/crl/intermediate.crl.pem
+  192  openssl crl -in /root/ca/intermediate/crl/intermediate.crl.pem -noout -text
+  193  scp /root/ca/intermediate/crl/intermediate.crl.pem rayan@192.168.80.142:/home/rayan/
+  194  scp /root/ca/intermediate/crl/intermediate.crl.pem rayan@192.168.80.145:/home/rayan/
+  195  scp /root/ca/intermediate/crl/intermediate.crl.pem rayan@192.168.80.141:/home/rayan/
+  196  openssl crl -in /root/ca/intermediate/crl/intermediate.crl.pem -noout -text

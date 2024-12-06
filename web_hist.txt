@@ -1,0 +1,52 @@
+pour le seveur web 
+ ping -c 4 192.168.80.xxx  # Ping vers PKI_Server
+    2  ping -c 4 192.168.80.141  # Ping vers PKI_Server
+    3  sudo apt update
+    4  su -
+    5  exit
+    6  clear
+    7  ip a
+    8  ls -l /home/user/esgi.local.cert.pem
+    9  ls -l /home/user/esgi.local.key.pem
+   10  ls -l /home/user/ca-chain.cert.pem
+   11  ls -l /home/rayan/esgi.local.cert.pem
+   12  ls -l /home/rayan/esgi.local.key.pem
+   13  ls -l /home/rayan/ca-chain.cert.pem
+   14  sudo apt update
+   15  su -
+   16  ls
+   17  sudo mv ~/esgi.local.cert.pem /etc/ssl/esgi/
+   18  su  mv ~/esgi.local.cert.pem /etc/ssl/esgi/
+   19  su root mv ~/esgi.local.cert.pem /etc/ssl/esgi/
+   20  su -
+   21  sudo mv ~/esgi.local.cert.pem /etc/ssl/esgi/
+   22  exit
+   23  exitsudo whoami
+   24  sudo whoami
+   25  sudo mv ~/esgi.local.cert.pem /etc/ssl/esgi/
+   26  a-chain.cert.pem /etc/ssl/esgi/
+   27  sudo mv ~/ca-chain.cert.pem /etc/ssl/esgi/
+   28  sudo mv ~/esgi.local.key.pem /etc/ssl/esgi/
+   29  sudo mv ~/esgi.local.cert.pem /etc/ssl/esgi/
+   30  ls
+   31  ls /etc/ssl/esgi/
+   32  sudo chmod 600 /etc/ssl/esgi/esgi.local.key.pem
+   33  sudo chmod 644 /etc/ssl/esgi/esgi.local.cert.pem /etc/ssl/esgi/ca-chain.cert.pem
+   34  sudo nano /etc/apache2/sites-available/esgi.local.conf
+   35  sudo a2ensite esgi.local.conf
+   36  systemctl reload apache2
+   37  sudo systemctl reload apache2
+   38  systemctl status apache2.service"
+   39  systemctl status apache2.service
+   40  su -
+   41  exit
+   42  apt install sudo
+   43  su -
+   44  history
+   45  su -
+   46  mv /home/rayan/intermediate.crl.pem /etc/ssl/
+   47  su -
+   48  exit
+   49  histrory
+   50  history
+sudo nano /etc/apache2/sites-available/esgi.local.conf

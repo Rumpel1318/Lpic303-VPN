@@ -1,0 +1,145 @@
+sudo apt install strongswan strongswan-pki libcharon-extra-plugins -y
+   22  sudo apt install strongswan strongswan-pki libcharon-extra-plugins -y
+   23  exit
+   24  sudo mkdir -p /etc/ipsec.d/{certs,private,cacerts}
+   25  sudo mv /home/rayan/vpnserver2.cert.pem /etc/ipsec.d/certs/
+   26  sudo mv /home/rayan/vpnserver2.key.pem /etc/ipsec.d/private/
+   27  sudo mv /home/rayan/ca-chain.cert.pem /etc/ipsec.d/cacerts/
+   28  sudo chmod 600 /etc/ipsec.d/private/vpnserver2.key.pem
+   29  sudo chmod 644 /etc/ipsec.d/certs/vpnserver2.cert.pem
+   30  sudo chmod 644 /etc/ipsec.d/cacerts/ca-chain.cert.pem
+   31  sudo nano /etc/ipsec.conf
+   32  sudo nano /etc/ipsec.secrets
+   33  sudo sysctl -w net.ipv4.ip_forward=1
+   34  sudo nano /etc/sysctl.conf
+   35  sudo ufw allow 500,4500/udp
+   36  sudo apt install ufw
+   37  sudo nano /etc/ipsec.conf
+   38  sudo sysctl -w net.ipv4.ip_forward=1
+   39  sudo ufw allow 500,4500/udp
+   40  sudo ufw allow 500,4500/udp
+   41  sudo ufw allow from 192.168.100.0/24 to any
+   42  sudo ufw allow from 192.168.200.0/24 to any
+   43  sudo systemctl restart strongswan
+   44  sudo systemctl status strongswan
+   45  sudo apt update
+   46  sudo apt install strongswan
+   47  systemctl list-units | grep strongswan
+   48  sudo systemctl status strongswan-starter
+   49  sudo systemctl restart strongswan
+   50  sudo systemctl restart strongswan-starter
+   51  sudo ipsec statusall
+   52  sudo journalctl -u strongswan
+   53  sudo tail -f /var/log/syslog
+   54  sudo nano /etc/ipsec.conf
+   55  sudo journalctl -u strongswan
+   56  sudo tail -f /var/log/syslog
+   57  sudo systemctl status rsyslog
+   58  sudo systemctl status systemd-journald
+   59  sudo apt update
+   60  sudo apt install rsyslog
+   61  sudo systemctl enable rsyslog
+   62  sudo systemctl start rsyslog
+   63  sudo systemctl status rsyslog
+   64  sudo nano /etc/strongswan/strongswan.conf
+   65  sudo nano /etc/strongswan.conf
+   66  sudo systemctl restart strongswan-starter
+   67  sudo tail -f /var/log/syslog
+   68  sudo tail -f /var/log/charon.log
+   69  sudo tail -f /var/log/syslog
+   70  sudo ipsec listcerts
+   71  openssl x509 -noout -modulus -in certs/vpnserver1.cert.pem | openssl md5
+   72  ls
+   73  exit
+   74  sudo nano /etc/strongswan.conf
+   75  sudo ipsec statusall
+   76  sudo nano /etc/ipsec.conf
+   77  ping 192.168.80.142
+   78  sudo ufw allow 500,4500/udp
+   79  sudo tail -f /var/log/syslog
+   80  sudo nano /etc/ipsec.conf
+   81  openssl x509 -in /etc/ipsec.d/cer -noout -subject
+   82  openssl x509 -in certs/vpnserver1.cert.pem -noot -subject
+   83  openssl x509 -noout -modulus -in certs/vpnserver1.cert.pem | openssl md5
+   84  cd /etc/ipsec.d/certs/
+   85  openssl x509 -noout -modulus -in certs/vpnserver1.cert.pem | openssl md5
+   86  openssl x509 -in certs/vpnserver1.cert.pem -noot -subject
+   87  openssl x509 -in /etc/ipsec.d/certs/vpnserver2.cert.pem -noout -subject
+   88  sudo nano /etc/ipsec.conf
+   89  sudo nano /etc/ipsec.conf
+   90  sudo systemctl restart strongswan-starter
+   91  sudo ipsec statusall
+   92  sudo tail -f /var/log/syslog
+   93  ls -l /etc/ipsec.d/cacerts/ca-chain.cert.pem
+   94  sudo chmod 600 /etc/ipsec.d/private/vpnserver1.key.pem
+   95  cd
+   96  ls -l /etc/ipsec.d/cacerts/ca-chain.cert.pem
+   97  sudo chmod 600 /etc/ipsec.d/private/vpnserver1.key.pem
+   98  openssl x509 -in /etc/ipsec.d/certs/vpnserver2.cert.pem -noout -subject
+   99  sudo nano /etc/ipsec.conf
+  100  chmod 600 /etc/ipsec.d/certs/vpnserver1.cert.pem
+  101  sudo chmod 600 /etc/ipsec.d/certs/vpnserver1.cert.pem
+  102  chmod 600 /etc/ipsec.d/certs/vpnserver2.cert.pem
+  103  chmod 600 /etc/ipsec.d/private/vpnserver2.key.pem
+  104  sudo systemctl restart strongswan
+  105  sudo systemctl restart strongswan-starter.service
+  106  sudo systemctl status strongswan
+  107  sudo systemctl status strongswan-starter.service
+  108  openssl x509 -in /etc/ipsec.d/certs/vpnserver2.cert.pem -noout -subject
+  109  ls /etc/ipsec.d/cacerts/
+  110  sudo iptables -A INPUT -p udp --dport 500 -j ACCEPT
+  111  sudo iptables -A INPUT -p udp --dport 4500 -j ACCEPT
+  112  sudo iptables -A INPUT -p esp -j ACCEPT
+  113  sudo iptables -A FORWARD -s 192.168.100.0/24 -d 192.168.200.0/24 -j ACCEPT
+  114  sudo iptables -A FORWARD -s 192.168.200.0/24 -d 192.168.100.0/24 -j ACCEPT
+  115  openssl x509 -noout -text -in /etc/ipsec.d/certs/vpnserver2.cert.pem
+  116  sudo nano /etc/ipsec.conf
+  117  openssl x509 -noout -modulus -in /etc/ipsec.d/certs/vpnserver2.cert.pem | openssl md5
+  118  openssl rsa -noout -modulus -in /etc/ipsec.d/private/vpnserver2.key.pem | openssl md5
+  119  openssl verify -CAfile /etc/ipsec.d/cacerts/ca-chain.cert.pem /etc/ipsec.d/certs/vpnserver1.cert.pem
+  120  openssl verify -CAfile /etc/ipsec.d/cacerts/ca-chain.cert.pem /etc/ipsec.d/certs/vpnserver1.cert.pem
+  121  ls -l /etc/ipsec.d/certs/
+  122  exit
+  123  sudo mv /home/rayan/vpnserver1.cert.pem /etc/ipsec.d/certs/
+  124  sudo chmod 644 /etc/ipsec.d/certs/vpnserver1.cert.pem
+  125  ls -l /etc/ipsec.d/certs/
+  126  sudo openssl verify -CAfile /etc/ipsec.d/cacerts/ca-chain.cert.pem /etc/ipsec.d/certs/vpnserver1.cert.pem
+  127  sudo openssl verify -CAfile /etc/ipsec.d/cacerts/ca-chain.cert.pem /etc/ipsec.d/certs/vpnserver2.cert.pem
+  128  sudo systemctl restart strongswan
+  129  sudo systemctl restart strongswan-starter.service
+  130  openssl x509 -in /etc/ipsec.d/certs/vpnserver1.cert.pem -noout -subject
+  131  openssl x509 -in /etc/ipsec.d/certs/vpnserver2.cert.pem -noout -subject
+  132  openssl verify -CAfile /etc/ipsec.d/cacerts/ca-chain.cert.pem /etc/ipsec.d/certs/vpnserver1.cert.pem
+  133  ls -l /etc/ipsec.d/certs/vpnserver2.cert.pem
+  134  scp root@192.168.80.145:/etc/ipsec.d/certs/vpnserver2.cert.pem /etc/ipsec.d/certs/
+  135  scp rayan@192.168.80.145:/etc/ipsec.d/certs/vpnserver2.cert.pem /home/rayan
+  136  scp rayan@192.168.80.145:/etc/ipsec.d/certs/vpnserver2.cert.pem /home/rayan
+  137  sudo tail -f /var/log/syslog
+  138  cd /etc/ipsec.d/certs/
+  139  sudo tail -f /var/log/syslog
+  140  sudo systemctl restart strongswan-starter
+  141  sudo ipsec statusall
+  142  sudo tail -f /var/log/syslog
+  143  openssl x509 -in /etc/ipsec.d/certs/vpnserver2.cert.pem -noout -subject
+  144  nano /etc/ipsec.conf
+  145  sudo ipsec listcacerts
+  146  nano /etc/ipsec.conf
+  147  sudo tail -f /var/log/syslog
+  148  sudo ipsec up vpn-site-to-site
+  149  sudo tail -f /var/log/syslog
+  150  ls -l /etc/ipsec.d/cacerts/
+  151  sudo systemctl restart strongswan
+  152  sudo systemctl restart strongswan-starter.service
+  153  sudo tail -f /var/log/syslog
+  154  nano /etc/ipsec.conf
+  155  sudo tail -f /var/log/syslog
+  156  mv /home/rayan/intermediate.crl.pem /etc/ipsec.d/crls/
+  157  chmod 644 /etc/ipsec.d/crls/intermediate.crl.pem
+  158  ls -l /etc/ipsec.d/crls/intermediate.crl.pem
+  159  chown root:root /etc/ipsec.d/crls/intermediate.crl.pem
+  160  ls -l /etc/ipsec.d/crls/intermediate.crl.pem
+  161  sudo systemctl restart strongswan
+  162  sudo systemctl restart strongswan-starter.service
+  163  sudo tail -f /var/log/syslog
+  164  exit
+  165  history
