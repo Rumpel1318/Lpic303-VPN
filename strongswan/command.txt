@@ -1,0 +1,20 @@
+# Load
+sudo swanctl --load-all
+
+# Initiate
+sudo swanctl --initiate --child net-to-net
+
+# Conns
+sudo swanctl --list-conns
+
+# Load
+sudo swanctl --list-sas
+
+
+sudo swanctl --terminate --child net-to-net
+
+
+sudo journalctl -u strongswan
+
+
+sudo systemctl restart strongswan
